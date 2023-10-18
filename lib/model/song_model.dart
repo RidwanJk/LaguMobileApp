@@ -56,12 +56,12 @@ final List<Song> songs = [
   ),
   Song(
     rank: 4,
-    title: "Bohemian Rhapsody",
-    artist: "Queen",
-    album: "Killer Queen",
-    year: "1975",
+    title: "Miss You",
+    artist: "Oliver Tree, Robin Schulz",
+    album: "Miss You",
+    year: "2022",
     ImageUrl:
-        "https://m.media-amazon.com/images/M/MV5BMTA2NDc3Njg5NDVeQTJeQWpwZ15BbWU4MDc1NDcxNTUz._V1_.jpg",
+        "https://geo-media.beatsource.com/image_size/1400x1400/a/0/d/a0d74f31-2b81-4d5f-a5e5-531ffa13c231.jpg",
   ),
   Song(
     rank: 5,

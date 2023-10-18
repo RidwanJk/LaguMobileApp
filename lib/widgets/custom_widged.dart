@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/playlist_model.dart';
 import 'package:myapp/views/browse_detail.dart';
+import 'package:myapp/views/lib_view.dart';
 import 'package:myapp/views/playlist_detail_page.dart';
 import 'package:myapp/views/song_details_page.dart';
 import 'package:myapp/model/song_model.dart';
@@ -78,7 +79,7 @@ class PlaylistButton extends StatelessWidget {
   }
 }
 
-Widget buildTombol(String text) {
+Widget buildTombol(BuildContext context, String text) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
@@ -90,7 +91,17 @@ Widget buildTombol(String text) {
         width: 2.0,
       ),
     ),
-    onPressed: () {},
+    onPressed: () {
+      // Navigate to the next page
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            // Replace `NextPage()` with the widget for your next page.
+            return libview();
+          },
+        ),
+      );
+    },
     child: SizedBox(
       height: 50,
       child: Center(

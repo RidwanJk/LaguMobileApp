@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/model/song_model.dart';
+import 'package:myapp/views/song_details_page.dart';
 import 'package:myapp/widgets/custom_widged.dart';
 import 'package:myapp/model/playlist_model.dart';
 
@@ -35,11 +37,9 @@ class MyView extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    Flexible(child: buildTombol(context, "Music")),
                     Flexible(
-                      child: buildTombol(" Music "),
-                    ),
-                    Flexible(
-                      child: buildTombol("Podcast"),
+                      child: buildTombol(context, "Podcast"),
                     ),
                   ],
                 ),
@@ -93,11 +93,28 @@ class MyView extends StatelessWidget {
                         height: 20,
                       ),
                       BigCard(
-                        onPressed: () {},
                         title: "Miss You",
                         subtitle: "Oliver Tree·Robin Schulz",
                         imageUrl:
                             "https://geo-media.beatsource.com/image_size/1400x1400/a/0/d/a0d74f31-2b81-4d5f-a5e5-531ffa13c231.jpg",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SongDetailsPage(
+                                song: Song(
+                                  rank: 4,
+                                  title: "Miss You",
+                                  artist: "Oliver Tree, Robin Schulz",
+                                  album: "Miss You",
+                                  year: "2022",
+                                  ImageUrl:
+                                      "https://geo-media.beatsource.com/image_size/1400x1400/a/0/d/a0d74f31-2b81-4d5f-a5e5-531ffa13c231.jpg",
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 10, top: 3),
