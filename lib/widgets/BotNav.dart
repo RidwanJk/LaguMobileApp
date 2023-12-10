@@ -4,7 +4,9 @@ import 'package:myapp/views/search_view.dart';
 import '../views/HomepageView.dart'; // Import your view class
 
 class BotNav extends StatefulWidget {
-  const BotNav({Key? key});
+  final int selectedIndex;
+
+  const BotNav({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   _BotNavState createState() => _BotNavState();
@@ -12,6 +14,12 @@ class BotNav extends StatefulWidget {
 
 class _BotNavState extends State<BotNav> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.selectedIndex;
+  }
 
   final List<Widget> _pages = [
     MyView(),

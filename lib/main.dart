@@ -27,8 +27,8 @@ class MyViewWithBotNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MyView(), // Your custom view widget
-      bottomNavigationBar: BotNav(),
+      body: MyView(),
+      bottomNavigationBar: BotNav(selectedIndex: 0),
     );
   }
 }

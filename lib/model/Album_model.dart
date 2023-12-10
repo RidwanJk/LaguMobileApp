@@ -1,31 +1,60 @@
-import 'package:spotify/spotify.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Album {
-  final String id;
-  final String name;
-  final String href;
-  final String type;
-  final String uri;
-  final String albumType;
-  final List<String> artists;
-  final List<String> availableMarkets;
-  final List<String> images;
-  final String releaseDate;
-  final String releaseDatePrecision;
+  final int albumId;
+  final String title;
+  final String duration;
+  final int releaseYear;
+  final String imageUrl;
 
   Album({
-    required this.id,
-    required this.name,
-    required this.href,
-    required this.type,
-    required this.uri,
-    required this.albumType,
-    required this.artists,
-    required this.availableMarkets,
-    required this.images,
-    required this.releaseDate,
-    required this.releaseDatePrecision,
+    required this.albumId,
+    required this.title,
+    required this.duration,
+    required this.releaseYear,
+    required this.imageUrl,
   });
-}
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      albumId: json['album_id'],
+      title: json['title'],
+      duration: json['duration'],
+      releaseYear: json['release_year'],
+      imageUrl: json['imageUrl'],
+    );
+  }
+  static Future<List<Album>> fetchAlbums(dynamic id) async {
+    final response = await http.get(Uri.parse(
+        'https://azzalea.pythonanywhere.com/api/category/$id/albums/'));
 
-final List<Album> AlbumModel = [];
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+
+      List<Album> albums = data.map((albumData) {
+        return Album.fromJson(albumData);
+      }).toList();
+
+      return albums;
+    } else {
+      throw Exception('Failed to load albums');
+    }
+  }
+
+  static Future<List<Album>> fetchAlbumsOnly() async {
+    final response = await http
+        .get(Uri.parse('https://azzalea.pythonanywhere.com/api/albums'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+
+      List<Album> albums = data.map((albumData) {
+        return Album.fromJson(albumData);
+      }).toList();
+
+      return albums;
+    } else {
+      throw Exception('Failed to load albums');
+    }
+  }
+}

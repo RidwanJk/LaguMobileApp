@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/model/song_model.dart';
 import 'package:myapp/widgets/custom_widged.dart';
-import '../model/song_model.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class SongDetailsPage extends StatefulWidget {
   final Song song;
 
-  SongDetailsPage({required this.song});
+  const SongDetailsPage({Key? key, required this.song}) : super(key: key);
 
   @override
   _SongDetailsPageState createState() => _SongDetailsPageState();
@@ -13,108 +14,164 @@ class SongDetailsPage extends StatefulWidget {
 
 class _SongDetailsPageState extends State<SongDetailsPage> {
   bool isLoved = false;
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+  final playeraudio = AudioPlayer();
+  @override
+  void initState() {
+    super.initState();
+
+    setAudio(widget.song.mp3Url);
+
+    playeraudio.onPlayerStateChanged.listen((state) {
+      setState(() {
+        isPlaying = state == PlayerState.playing;
+      });
+    });
+    playeraudio.onDurationChanged.listen((newDuration) {
+      setState(() {
+        duration = newDuration;
+      });
+    });
+
+    playeraudio.onPositionChanged.listen((newPosition) {
+      setState(() {
+        position = newPosition;
+      });
+    });
+  }
+
+  Future setAudio(urlaudio) async {
+    playeraudio.setReleaseMode(ReleaseMode.loop);
+
+    playeraudio.setSourceUrl(urlaudio);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final songDetail = widget.song;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.song.title),
+        title: Text(songDetail.title),
       ),
       backgroundColor: Color.fromARGB(255, 19, 5, 49),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 16),
+            // Your song details UI widgets
+            SizedBox(height: 20),
             Center(
-              child: Image.network(
-                widget.song.ImageUrl,
-                width: 400,
-                height: 400,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                width: 300,
+                height: 300,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                      18), // Adjust this to match the outer border
+                  child: Image.network(
+                    songDetail.imageUrl,
+                    width: 300,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 16),
+            Text(
+              songDetail.title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+
+            Text(
+              "${songDetail.artistName}",
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            SizedBox(height: 16),
+            Slider(
+              min: 0,
+              max: duration.inSeconds.toDouble(),
+              value: position.inSeconds.toDouble(),
+              onChanged: (value) async {
+                final position = Duration(seconds: value.toInt());
+                await playeraudio.seek(position);
+                await playeraudio.resume();
+              },
+            ),
             Padding(
-              padding: const EdgeInsets.only(left: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "${widget.song.title}",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                    formatTime(position),
+                    style: TextStyle(color: Colors.white),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      isLoved ? Icons.favorite : Icons.favorite_border,
-                      size: 24,
-                      color: isLoved ? Colors.red : Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        isLoved = !isLoved;
-                      });
-                    },
+                  Text(
+                    formatTime(duration),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 40),
-              child: Text(
-                "${widget.song.artist}",
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 16),
-            LinearProgressIndicator(
-              value: 0.6,
-              backgroundColor: Colors.grey,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
             ),
             SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon:
-                      Icon(Icons.skip_previous, size: 36, color: Colors.white),
-                  onPressed: () {
-                    // Handle skip to the previous action
-                    // Implement the logic to skip to the previous song here
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.play_arrow, size: 36, color: Colors.white),
-                  onPressed: () {
-                    // Handle play action
-                    // Implement the logic to play the current song here
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.pause, size: 36, color: Colors.white),
-                  onPressed: () {
-                    // Handle pause action
-                    // Implement the logic to pause the currently playing song here
-                  },
-                ),
-                IconButton(
-                  icon: Icon(Icons.skip_next, size: 36, color: Colors.white),
-                  onPressed: () {
-                    // Handle skip to next action
-                    // Implement the logic to skip to the next song here
+                  icon: Icon(
+                    isPlaying ? Icons.pause : Icons.play_arrow,
+                  ),
+                  iconSize: 32,
+                  color: Colors.white,
+                  onPressed: () async {
+                    if (isPlaying) {
+                      await playeraudio.pause();
+                    } else {
+                      await playeraudio.resume();
+                    }
                   },
                 ),
               ],
             ),
             SizedBox(height: 16),
-            LyricsWidget(
-                lyrics:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam volutpat magna sit amet odio euismod aliquam. Proin eget augue ut enim interdum mattis non at dolor. Aenean luctus ante elit, sed imperdiet justo fringilla eu. Sed sit amet eros vel leo luctus varius. Donec vehicula vulputate finibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id arcu mollis, blandit tortor a, pharetra nisi. Nulla pellentesque aliquam nunc a iaculis. Mauris metus felis, volutpat pretium rutrum vel, condimentum sed magna. In dapibus ante id ex maximus pulvinar. Curabitur aliquet leo vel ante ultricies, at condimentum nulla mollis. Integer venenatis ligula sit amet ante sodales placerat. Quisque mattis, augue vel ornare facilisis, nisl odio ultrices lectus, vel accumsan nunc enim eget ligula."),
+
+            Container(
+              child: lyricsWidget(context),
+            )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget lyricsWidget(BuildContext context) {
+    final lyrics = widget.song.Lirik ?? 'Lyrics not available';
+    return Card(
+      
+      color: Color.fromARGB(255, 183, 0, 255),
+      child: SizedBox(
+        width: 300,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            lyrics,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
