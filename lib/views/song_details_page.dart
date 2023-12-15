@@ -54,7 +54,11 @@ class _SongDetailsPageState extends State<SongDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(songDetail.title),
+        title: Text(
+          songDetail.title,
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(255, 48, 23, 100),
       ),
       backgroundColor: Color.fromARGB(255, 19, 5, 49),
       body: SingleChildScrollView(
@@ -159,7 +163,6 @@ class _SongDetailsPageState extends State<SongDetailsPage> {
   Widget lyricsWidget(BuildContext context) {
     final lyrics = widget.song.Lirik ?? 'Lyrics not available';
     return Card(
-      
       color: Color.fromARGB(255, 183, 0, 255),
       child: SizedBox(
         width: 300,

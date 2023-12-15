@@ -107,18 +107,24 @@ class _MyViewState extends State<MyView> {
       backgroundColor: const Color.fromARGB(255, 19, 5, 49),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 19, 5, 49),
-        title: const Text('Selamat Datang!'),
+        title: const Text(
+          'Selamat Datang!',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
+            color: Colors.white,
             onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.notifications),
+            color: Colors.white,
             onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.verified_user),
+            color: Colors.white,
             onPressed: () {},
           ),
         ],
@@ -132,7 +138,7 @@ class _MyViewState extends State<MyView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(child: buildTombol(context, "Music")),
-                  Flexible(child: buildTombol(context, "Podcast")),
+                  Flexible(child: buildTombol(context, "Albums")),
                 ],
               ),
             ),
@@ -161,13 +167,13 @@ class _MyViewState extends State<MyView> {
                   children: [
                     SizedBox(width: 20),
                     Avatar(imageUrl: songs[_randomSongIndex].artistImageUrl),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           "Recomended Artist",
                           style: TextStyle(
                             color: Color.fromARGB(255, 255, 255, 255),

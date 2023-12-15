@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:myapp/model/Album_model.dart';
 import 'package:myapp/model/Artist_model.dart';
 import 'package:myapp/model/song_model.dart';
+import 'package:myapp/views/album_detail_page.dart';
+import 'package:myapp/views/artist_detail_page.dart';
+import 'package:myapp/views/song_details_page.dart';
 import 'package:myapp/widgets/custom_widged.dart';
 
 class libview extends StatefulWidget {
@@ -93,14 +96,19 @@ class _libviewState extends State<libview> {
                   "https://img.freepik.com/free-photo/handsome-bearded-guy-posing-against-white-wall_273609-20597.jpg",
             ),
           ),
-          title: const Text('Your Library'),
+          title: const Text(
+            'Your Library',
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.search),
+              color: Colors.white,
               onPressed: () {},
             ),
             IconButton(
               icon: const Icon(Icons.add),
+              color: Colors.white,
               onPressed: () {},
             ),
           ],
@@ -123,19 +131,30 @@ class _libviewState extends State<libview> {
                 : ListView.builder(
                     itemCount: songs.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
-                          child: Image.network(
-                            songs[index].imageUrl,
-                            fit: BoxFit.cover,
+                      return InkWell(
+                        child: ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(
+                              songs[index].imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(
+                            songs[index].title,
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        title: Text(
-                          songs[index].title,
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        onTap: () {
+                          final song = songs[index];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SongDetailsPage(song: song)),
+                          );
+                        },
                       );
                     },
                   ),
@@ -144,19 +163,31 @@ class _libviewState extends State<libview> {
                 : ListView.builder(
                     itemCount: albums.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
-                          child: Image.network(
-                            albums[index].imageUrl,
-                            fit: BoxFit.cover,
+                      return InkWell(
+                        child: ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(
+                              albums[index].imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(
+                            albums[index].title,
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                        title: Text(
-                          albums[index].title,
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        onTap: () {
+                          final album = albums[index];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AlbumDetailPage(album: album),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -165,20 +196,32 @@ class _libviewState extends State<libview> {
                 : ListView.builder(
                     itemCount: artists.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
-                          child: Image.network(
-                            artists[index].imageUrl,
-                            fit: BoxFit.cover,
+                      return InkWell(
+                        child: ListTile(
+                          leading: Container(
+                            width: 50,
+                            height: 50,
+                            child: Image.network(
+                              artists[index].imageUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          title: Text(
+                            artists[index].name,
+                            style: const TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255)),
                           ),
                         ),
-                        title: Text(
-                          artists[index].name,
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                        ),
+                        onTap: () {
+                          final artist = artists[index];
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  artistDetail(artist: artist),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),

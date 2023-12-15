@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:myapp/model/Album_model.dart';
+import 'package:myapp/model/Artist_model.dart';
 
 class Song {
   final int songId;

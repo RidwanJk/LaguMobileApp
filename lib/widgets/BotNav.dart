@@ -33,6 +33,7 @@ class _BotNavState extends State<BotNav> {
       backgroundColor: const Color.fromARGB(255, 19, 5, 49),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color.fromARGB(255, 38, 18, 79),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

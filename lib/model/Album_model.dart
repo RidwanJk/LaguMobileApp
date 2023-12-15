@@ -57,4 +57,20 @@ class Album {
       throw Exception('Failed to load albums');
     }
   }
+
+  static Future<List<Album>> fetchAlbumFromArtist(id) async {
+    final response = await http.get(
+        Uri.parse('https://azzalea.pythonanywhere.com/api/artist/$id/albums/'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+
+      List<Album> albums = data.map((artistData) {
+        return Album.fromJson(artistData);
+      }).toList();
+
+      return albums;
+    } else {
+      throw Exception('Failed to load albums');
+    }
+  }
 }

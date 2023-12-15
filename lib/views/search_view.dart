@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/model/Category_model.dart';
 import 'package:myapp/model/song_model.dart';
 import 'package:myapp/views/category_detail_page.dart';
+import 'package:myapp/views/song_details_page.dart';
 import 'package:myapp/widgets/custom_widged.dart';
 
 class SearchView extends StatefulWidget {
@@ -47,9 +48,6 @@ class _SearchViewState extends State<SearchView> {
       setState(() {
         songs = fetchedsongs;
         print(songs);
-
-        // Toggle the flag based on whether search results are available
-        showSearchResults = fetchedsongs.isNotEmpty;
       });
     } catch (e) {
       print('Error fetching Category: $e');
@@ -222,11 +220,52 @@ class _SearchViewState extends State<SearchView> {
         itemCount: songs.length,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
-            title: Text(songs[index].title),
-            subtitle: Text(songs[index].artistName),
-            // Add more details or customize the list tile as needed
+            leading: Text(
+              "${index + 1}" + ".",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22),
+            ),
+            title: Row(
+              children: [
+                Image.network(songs[index].imageUrl, width: 70, height: 70),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 180,
+                      child: Text(
+                        songs[index].title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22),
+                      ),
+                    ),
+                    Text(
+                      songs[index].artistName,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w100,
+                          fontSize: 18),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             onTap: () {
-              // Handle song selection if needed
+              final song = songs[index];
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SongDetailsPage(song: song),
+                ),
+              );
             },
           );
         },

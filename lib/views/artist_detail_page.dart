@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/model/Album_model.dart';
-import 'package:myapp/model/Category_model.dart';
+import 'package:myapp/model/Artist_model.dart';
 import 'package:myapp/model/song_model.dart';
 import 'package:myapp/views/song_details_page.dart';
 
-class categorydetail extends StatefulWidget {
-  final Category category;
-  categorydetail({
-    required this.category,
+class artistDetail extends StatefulWidget {
+  final Artist artist;
+  artistDetail({
+    required this.artist,
   });
 
   @override
-  State<categorydetail> createState() => _categorydetailState();
+  State<artistDetail> createState() => _artistDetailState();
 }
 
-class _categorydetailState extends State<categorydetail> {
+class _artistDetailState extends State<artistDetail> {
   List<Song> songs = [];
   List<Album> albums = [];
   bool _loading = false;
@@ -22,16 +22,16 @@ class _categorydetailState extends State<categorydetail> {
   @override
   void initState() {
     super.initState();
-    final categoryide = widget.category.categoryId;
-    fetchData(categoryide.toString());
+    final artistID = widget.artist.artist_id;
+    fetchData(artistID);
   }
 
-  fetchData(dynamic categoryId) async {
+  fetchData(dynamic artistId) async {
     try {
       setState(() {
         _loading = true;
       });
-      List<Album> fetchedAlbums = await Album.fetchAlbums(categoryId);
+      List<Album> fetchedAlbums = await Album.fetchAlbumFromArtist(artistId);
       print('Fetched Albums: $fetchedAlbums');
       setState(() {
         albums = fetchedAlbums;
@@ -74,13 +74,12 @@ class _categorydetailState extends State<categorydetail> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor: const Color.fromARGB(255, 19, 5, 49),
             expandedHeight: 300.0,
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                "${widget.category.name}",
+                "${widget.artist.name}",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -102,7 +101,7 @@ class _categorydetailState extends State<categorydetail> {
                 },
                 blendMode: BlendMode.multiply,
                 child: Image.network(
-                  widget.category.imageUrl,
+                  widget.artist.imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
